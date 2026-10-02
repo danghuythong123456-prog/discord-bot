@@ -1,0 +1,57 @@
+const { Client, GatewayIntentBits } = require("discord.js");
+
+const OWNER_ID = "1386591593477181485";
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
+});
+
+client.once("ready", () => {
+  console.log(`Bot đã online: ${client.user.tag}`);
+});
+
+client.on("messageCreate", async (message) => {
+  if (message.author.bot) return;
+
+  const text = message.content.toLowerCase().trim();
+  const isOwner = message.author.id === OWNER_ID;
+
+  // Câu riêng dành cho chủ nhân
+  if (isOwner && text.includes("em yêu")) {
+    return message.reply("Dạ chủ nhân 👑");
+  }
+
+  // Người khác gọi "em yêu"
+  if (!isOwner && text.includes("em yêu")) {
+    return message.reply("Gì mấy thằng chim bé 😏");
+  }
+
+  // Các câu trả lời dành riêng cho chủ nhân
+  if (isOwner) {
+    if (text === "hello" || text === "xin chào") {
+      return message.reply("Dạ chủ nhân, em đây 👑");
+    }
+
+    if (text.includes("mày đâu")) {
+      return message.reply("Em đây, chủ nhân gọi là em xuất hiện 😎");
+    }
+
+    if (text.includes("mày khỏe không")) {
+      return message.reply("Em khỏe để phục vụ chủ nhân 😎");
+    }
+
+    if (text.includes("cảm ơn")) {
+      return message.reply("Dạ, không có gì đâu chủ nhân 👑");
+    }
+
+    if (text.includes("ngủ đi")) {
+      return message.reply("Dạ, nhưng chủ nhân gọi thì em vẫn dậy 😴");
+    }
+  }
+});
+
+client.login(process.env.DISCORD_TOKEN);
